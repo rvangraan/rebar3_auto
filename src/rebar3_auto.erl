@@ -144,7 +144,8 @@ auto(Extensions) ->
 
 flush() ->
     receive
-        _ ->
+        _M ->
+            io:format("Discarding message ~p\n", [_M]),
             flush()
     after 0 -> ok
     end.
