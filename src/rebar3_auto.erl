@@ -111,6 +111,7 @@ auto(Extensions) ->
         _ ->
             receive
                 {_Pid, _Type, {ChangedFile, _Events}} ->
+                    io:format("File changed: ~p~n", [ChangedFile]),
                     Ext = filename:extension(unicode:characters_to_binary(ChangedFile)),
                     IsValid = lists:any(
                         fun(ValidExt) ->
