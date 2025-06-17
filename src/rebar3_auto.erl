@@ -156,13 +156,14 @@ listen_on_project_apps(State, Opts) ->
     ],
     ExtraDirs = [unicode:characters_to_binary(D) || D <- proplists:get_value(extra_dirs, Opts, [])],
     ProjectApps = rebar_state:project_apps(State),
-    io:format("Project Apps: ~p~n", [ProjectApps]),
-    io:format("Checkout Deps: ~p~n", [CheckoutDeps]),
-    io:format("Extra Dirs: ~p~n", [ExtraDirs]),
+    % io:format("Project Apps: ~p~n", [ProjectApps]),
+    % io:format("Checkout Deps: ~p~n", [CheckoutDeps]),
+    % io:format("Extra Dirs: ~p~n", [ExtraDirs]),
 
     lists:foreach(
         fun(AppInfo) ->
             AppDir = rebar_app_info:dir(AppInfo),
+            io:format("Watching app: ~p in dir: ~p~n", [rebar_app_info:name(AppInfo), AppDir]),
             Dirs = ExtraDirs ++ [<<"src">>, <<"c_src">>],
             lists:foreach(
                 fun(Dir) ->
