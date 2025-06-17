@@ -32,6 +32,8 @@
 %% ===================================================================
 -spec init(rebar_state:t()) -> {ok, rebar_state:t()}.
 init(State) ->
+    MyDir = beam_dir(?MODULE),
+    code:stick_dir(MyDir),
     Provider = providers:create([
         % The 'user friendly' name of the task
         {name, ?PROVIDER},
@@ -103,6 +105,17 @@ get_extensions(State, Opts) ->
     ExtraExtensions2 = proplists:get_value(extra_extensions, Opts, []),
     ExtraExtensions = ExtraExtensions1 ++ ExtraExtensions2,
     [unicode:characters_to_binary(Ext) || Ext <- ExtraExtensions] ++ ?VALID_EXTENSIONS_DEFAULT.
+
+-spec beam_dir(atom()) -> file:filename() | preloaded | non_existing.
+beam_dir(Mod) ->
+    case code:which(Mod) of
+        Path when is_list(Path) ->
+            % e.g. "/full/path/to"
+            filename:dirname(Path);
+        % preloaded | non_existing
+        Other ->
+            Other
+    end.
 
 auto(Extensions) ->
     case whereis(rebar_agent) of
